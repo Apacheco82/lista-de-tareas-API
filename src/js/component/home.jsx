@@ -26,18 +26,17 @@ const Home = () => {
   }, []);
 
 
-  const addTarea = (valor) => {
+ /* const addTarea = (valor) => {
     setListaTareas([...listaTareas, valor]);
     console.log("la lista final", listaTareas);
 
-  };
+  };*/
 
-  /*const addTarea = async (valor) => {
+  const addTarea = async (valor) => {
     try {
       // Realizar alguna operación asíncrona aquí, como una llamada a una API
       const resultado = await fetch(URL, {
-        method: "PUT",
-        body: JSON.stringify({tarea: valor}),
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -47,13 +46,15 @@ const Home = () => {
       if (resultado.ok) {
         const nuevaListaTareas = [...listaTareas, valor];
         setListaTareas(nuevaListaTareas);
+		console.log("la nueva", nuevaListaTareas)
+//llamada a una funcion put
       } else {
         throw new Error("Hubo un problema al agregar la tarea");
       }
     } catch (error) {
       console.error(error);
     }
-  };*/
+  };
 
   return (
     <div className="container">
