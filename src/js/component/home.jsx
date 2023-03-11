@@ -33,6 +33,7 @@ const Home = () => {
     })
       .then(() => {
         console.log("put hecho con exito");
+        get()
       })
 
       .catch((error) => {
