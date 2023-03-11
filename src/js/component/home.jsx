@@ -7,19 +7,21 @@ const URL = "https://assets.breatheco.de/apis/fake/todos/user/apacheco";
 
 const Home = () => {
   const [listaTareas, setListaTareas] = useState([]);
-
+  
   useEffect(() => {
-    fetch(URL, {method: "GET", headers: {"Content-Type": "application/json"}})
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        return setListaTareas(data);
-      })
-      .catch((error) => {
-        console.log("el error", error);
-      });
-  }, []);
+    get()
+   }, []);
+
+  const get = () =>{ fetch(URL, {method: "GET", headers: {"Content-Type": "application/json"}})
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    return setListaTareas(data);
+  })
+  .catch((error) => {
+    console.log("el error", error);
+  })}
 
   const putTareas = (listaTareas) => {
     fetch(URL, {
@@ -35,6 +37,7 @@ const Home = () => {
         console.log("el error", error);
       });
   };
+ 
 
   const addTarea = (valor) => {
     const nuevaListaTareas = [...listaTareas, valor];

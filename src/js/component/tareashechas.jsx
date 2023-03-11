@@ -6,7 +6,7 @@ const TareasHechas = ({tarea, index, deleteTarea}) => {
     deleteTarea(index);
   };
   return (
-    <li className="list-group-item">
+    <li className="list-group-item" id="tareasHechas">
       {tarea.label}{" "}
       <i
         className="fa-solid fa-xmark"
