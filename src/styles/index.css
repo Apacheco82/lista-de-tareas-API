@@ -8,10 +8,15 @@ input{
     box-shadow: 1px 2px 5px 1px rgba(0,0,0,0.75);
 }
 .card{
+    border:none;
     margin-top: 20px;
     box-shadow: 1px 2px 5px 1px rgba(0,0,0,0.75);
+    
 }
 i{
     float: right;
     margin:5px;
+}
+ul{
+    background-color: red;
 }
