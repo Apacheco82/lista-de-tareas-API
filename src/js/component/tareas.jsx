@@ -1,12 +1,13 @@
 import React from "react";
 
-const Tareas = ({tarea, index, deleteTarea, checkTarea}) => {
+const Tareas = ({ tarea, deleteTarea, checkTarea}) => {
   const handleCheck = () => {
-    checkTarea(index);
+    checkTarea(tarea);
 
   };
   const handleDelete = () => {
-    deleteTarea(index);
+    
+    deleteTarea(tarea);
   };
   return (
     <li className="list-group-item">

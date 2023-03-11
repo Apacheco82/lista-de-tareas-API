@@ -7,21 +7,23 @@ const URL = "https://assets.breatheco.de/apis/fake/todos/user/apacheco";
 
 const Home = () => {
   const [listaTareas, setListaTareas] = useState([]);
-  
-  useEffect(() => {
-    get()
-   }, []);
 
-  const get = () =>{ fetch(URL, {method: "GET", headers: {"Content-Type": "application/json"}})
-  .then((response) => {
-    return response.json();
-  })
-  .then((data) => {
-    return setListaTareas(data);
-  })
-  .catch((error) => {
-    console.log("el error", error);
-  })}
+  useEffect(() => {
+    get();
+  }, []);
+
+  const get = () => {
+    fetch(URL, {method: "GET", headers: {"Content-Type": "application/json"}})
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        return setListaTareas(data);
+      })
+      .catch((error) => {
+        console.log("el error", error);
+      });
+  };
 
   const putTareas = (listaTareas) => {
     fetch(URL, {
@@ -37,7 +39,6 @@ const Home = () => {
         console.log("el error", error);
       });
   };
- 
 
   const addTarea = (valor) => {
     const nuevaListaTareas = [...listaTareas, valor];
@@ -46,40 +47,42 @@ const Home = () => {
     putTareas(nuevaListaTareas);
   };
 
-  const deleteTarea = (id) => {
-    const nuevaListaTareas = listaTareas.filter((tarea) => tarea.id !== id);
+  const deleteTarea = (tarea) => {
+    console.log(tarea);
+    const nuevaListaTareas = listaTareas.filter((obj) => obj.id !== tarea.id);
     setListaTareas(nuevaListaTareas);
     putTareas(nuevaListaTareas);
   };
 
-  const checkTarea = (index) => {
-    //1. modificar el DONE de una tarea existente
-    const tareaMod = listaTareas[index];
-    tareaMod.done = true;
-
-    //2. borrado de la tarea de la lista original
-    listaTareas.splice(index, 1);
-    setListaTareas(listaTareas);
-
-    //3.setear la tarea completada a la lista de tareas
-    addTarea(tareaMod);
+  const checkTarea = (tarea) => {
+    const id = tarea.id;
+    const modificaTarea = listaTareas.map((obj) => {
+      if (obj.id === id) {
+        return {...obj, done: true};
+      }
+      return obj;
+    });
+    const nuevaListaTareas = [...modificaTarea];
+    setListaTareas(nuevaListaTareas);
+    putTareas(nuevaListaTareas);
   };
 
   return (
     <div className="container">
-      <Formulario addTarea={addTarea} />
+      <Formulario addTarea={addTarea} listaTareas={listaTareas} />
 
       <div className="card">
         <ul className="list-group list-group-flush">
           {listaTareas
-            .filter((tarea) => tarea.done == false) // Filtrar tareas completas
+            .filter((tarea) => tarea.done == false && tarea.id != 0) // Filtrar tareas completas
+            // .filter((tarea) => tarea.id != "0")
             .map((tarea, index) => (
               <Tareas
-                key={tarea.id}
+                key={index}
                 tarea={tarea}
                 index={index}
-                deleteTarea={() => deleteTarea(tarea.id)}
-                checkTarea={() => checkTarea(index)}
+                deleteTarea={() => deleteTarea(tarea)}
+                checkTarea={() => checkTarea(tarea)}
               />
             ))}
         </ul>
@@ -88,13 +91,18 @@ const Home = () => {
       <div className="card">
         <ul className="list-group list-group-flush">
           {listaTareas
-            .filter((tarea) => tarea.done == true)
+            .filter((tarea) => tarea.done == true && tarea.id != 0)
             .map(
               (
                 tarea,
                 index //se hace un mapeo de las tareas añadiendo un indice, una tarea y dos funciones para borrar y marcar como completa
               ) => (
-                <TareasHechas key={tarea.id} tarea={tarea} index={index}  deleteTarea={() => deleteTarea(tarea.id)}/>
+                <TareasHechas
+                  key={index}
+                  tarea={tarea}
+                  index={index}
+                  deleteTarea={() => deleteTarea(tarea)}
+                />
               )
             )}
         </ul>

@@ -1,9 +1,9 @@
 import React from "react";
 
-const TareasHechas = ({tarea, index, deleteTarea}) => {
+const TareasHechas = ({tarea, deleteTarea}) => {
   
   const handleDelete = () => {
-    deleteTarea(index);
+    deleteTarea(tarea);
   };
   return (
     <li className="list-group-item" id="tareasHechas">

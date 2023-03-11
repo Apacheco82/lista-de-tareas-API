@@ -1,26 +1,34 @@
 import React, {useState} from "react";
 
 const initialState = {
+  id: "",
   label: "",
   done: "",
 };
 
-const Formulario = ({ addTarea}) => {
+const Formulario = ({addTarea, listaTareas}) => {
   const [valor, setValor] = useState("");
-  const [objeto, setObjeto] = useState(initialState);
+  //  const [objeto, setObjeto] = useState(initialState);
+
+  const highestId = listaTareas.reduce((maxId, tarea) => {
+    return tarea.id > maxId ? tarea.id : maxId;
+  }, 0);
 
   const handleChange = (e) => {
-    const newValue = e.target.value
+    const newValue = e.target.value;
     setValor(newValue);
-    setObjeto({"label": newValue ,"done": false});
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && valor.length >= 3) {
       //cuando se pulse tecla
       e.preventDefault();
-      addTarea(objeto); //llamamos a la funcion addtarea que está en home
+      const newId = highestId + 1;
+      const newObjeto = {id: newId, label: valor, done: false};
+      addTarea(newObjeto); //llamamos a la funcion addtarea que está en home
       setValor(""); //si la tecla es pulsada es enter y el input es mayor de 3 de longitud, mete el valor de la misma en un array o "null" y vacía el input
+    } else if (e.key === "Enter" && valor.length <= 2) {
+      e.preventDefault();
     }
   };
   return (
