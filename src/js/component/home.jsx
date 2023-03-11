@@ -46,9 +46,8 @@ const Home = () => {
     putTareas(nuevaListaTareas);
   };
 
-  const deleteTarea = (index) => {
-    const nuevaListaTareas = [...listaTareas];
-    nuevaListaTareas.splice(index, 1);
+  const deleteTarea = (id) => {
+    const nuevaListaTareas = listaTareas.filter((tarea) => tarea.id !== id);
     setListaTareas(nuevaListaTareas);
     putTareas(nuevaListaTareas);
   };
@@ -76,10 +75,10 @@ const Home = () => {
             .filter((tarea) => tarea.done == false) // Filtrar tareas completas
             .map((tarea, index) => (
               <Tareas
-                key={index}
+                key={tarea.id}
                 tarea={tarea}
                 index={index}
-                deleteTarea={() => deleteTarea(index)}
+                deleteTarea={() => deleteTarea(tarea.id)}
                 checkTarea={() => checkTarea(index)}
               />
             ))}
@@ -95,7 +94,7 @@ const Home = () => {
                 tarea,
                 index //se hace un mapeo de las tareas añadiendo un indice, una tarea y dos funciones para borrar y marcar como completa
               ) => (
-                <TareasHechas key={index} tarea={tarea} index={index}  deleteTarea={() => deleteTarea(index)}/>
+                <TareasHechas key={tarea.id} tarea={tarea} index={index}  deleteTarea={() => deleteTarea(tarea.id)}/>
               )
             )}
         </ul>
