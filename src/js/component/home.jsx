@@ -38,6 +38,7 @@ const Home = () => {
 
       .catch((error) => {
         console.log("el error", error);
+        get()
       });
   };
 
@@ -49,7 +50,6 @@ const Home = () => {
   };
 
   const deleteTarea = (tarea) => {
-    console.log(tarea);
     const nuevaListaTareas = listaTareas.filter((obj) => obj.id !== tarea.id);
     setListaTareas(nuevaListaTareas);
     putTareas(nuevaListaTareas);
