@@ -2,22 +2,18 @@ import React, {useState, useEffect} from "react";
 import Formulario from "./formulario.jsx";
 import Tareas from "./tareas.jsx";
 import TareasHechas from "./tareashechas.jsx";
-import Spinner from "./spinner.jsx";
 
-const URL = "https://assets.breatheco.de/apis/fake/todos/user/apacheco";
+
+const URL = "https://assets.breatheco.de/apis/fake/todos/user/apacheco"
+
 
 const Home = () => {
   const [listaTareas, setListaTareas] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    get();
-  }, []);
-
- /* useEffect(() => { //prueba para ver si se puede ejecutar un get cuando cambie la lista de tareas, no funciona
-    get();
-  }, [listaTareas]);*/
-
+ 
   const get = async () => {
+    setLoading(true);
     try {
       const response = await fetch(URL, {
         method: "GET",
@@ -26,23 +22,28 @@ const Home = () => {
       const data = await response.json();
       setListaTareas(data);
     } catch (error) {
-      console.log("el error", error);
+   //   console.log("el error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    get();
+  }, []);
+
   const putTareas = async (listaTareas) => {
     try {
-      const response = await fetch(URL, {
+      await fetch(URL, {
         method: "PUT",
         body: JSON.stringify(listaTareas),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/JSON"},
       });
+      get();
       console.log("put hecho con exito");
-      setTimeout(() => { //no es real, si falla entre medias tiene demasiado retardo, pero es la manera de que deje hacer cosas rápido
-        get();
-      }, 100000);
+     
     } catch (error) {
-      console.log("el error", error);
+    console.log("el error", error);
     }
   };
 
@@ -53,7 +54,7 @@ const Home = () => {
       //setListaTareas([...listaTareas, valor]); esto no se puede hacer por problemas de sincronía, hay que almacenar el valor nuevo al array existente metiéndolo en una const (dos líneas arriba)
       await putTareas(nuevaListaTareas);
     } catch (error) {
-      console.log(error);
+     // console.log(error);
     }
   };
 
@@ -63,7 +64,7 @@ const Home = () => {
       setListaTareas(nuevaListaTareas);
       await putTareas(nuevaListaTareas);
     } catch (error) {
-      console.log(error);
+     // console.log(error);
     }
   };
 
@@ -78,7 +79,16 @@ const Home = () => {
   };
 
   return (
-    <div className="container">
+    <>
+      {loading ? (
+     <div className="d-flex justify-content-center">
+     <div className="spinner-border text-primary" role="status">
+       <span className="sr-only">Loading...</span>
+     </div>
+   </div>
+      ) : (
+        <div>
+          { <div className="container">
       <Formulario addTarea={addTarea} listaTareas={listaTareas} />
 
       <div className="card">
@@ -117,8 +127,10 @@ const Home = () => {
             )}
         </ul>
       </div>
-    </div>
+    </div>}
+        </div>
+      )}
+    </>
   );
 };
-
 export default Home;

@@ -22,3 +22,6 @@ li{
     text-decoration: line-through;
     background-color: mintcream;
 }
+.spinner-border{
+   margin-top: 100px !important;
+}
