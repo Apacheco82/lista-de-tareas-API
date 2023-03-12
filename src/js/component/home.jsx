@@ -13,7 +13,7 @@ const Home = () => {
 
  
   const get = async () => {
-    setLoading(true); //se setea el estado en true, si se hace al revés se queda siempre cargando
+    setLoading(true); //se setea el estado en true, si se hace al revés se queda siempre cargando por el renderizado condicional del return
     try {
       const response = await fetch(URL, { //se obtienen los datos con GET, opciones dadas por la API
         method: "GET",
