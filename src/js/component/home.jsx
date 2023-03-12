@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Formulario from "./formulario.jsx";
 import Tareas from "./tareas.jsx";
 import TareasHechas from "./tareashechas.jsx";
+import Spinner from "./spinner.jsx";
 
 const URL = "https://assets.breatheco.de/apis/fake/todos/user/apacheco";
 
@@ -12,56 +13,60 @@ const Home = () => {
     get();
   }, []);
 
-  const get = () => {
-    fetch(URL, {method: "GET", headers: {"Content-Type": "application/json"}})
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        return setListaTareas(data);
-      })
-      .catch((error) => {
-        console.log("el error", error);
+  const get = async () => {
+    try {
+      const response = await fetch(URL, {
+        method: "GET",
+        headers: {"Content-Type": "application/json"},
       });
+      const data = await response.json();
+      setListaTareas(data);
+    } catch (error) {
+      console.log("el error", error);
+    }
   };
 
-  const putTareas = (listaTareas) => {
-    fetch(URL, {
-      method: "PUT",
-      body: JSON.stringify(listaTareas),
-      headers: {"Content-Type": "application/json"},
-    })
-      .then(() => {
-        console.log("put hecho con exito");
-        get()
-      })
-
-      .catch((error) => {
-        console.log("el error", error);
-        get()
+  const putTareas = async (listaTareas) => {
+    try {
+      const response = await fetch(URL, {
+        method: "PUT",
+        body: JSON.stringify(listaTareas),
+        headers: {"Content-Type": "application/json"},
       });
+      console.log("put hecho con exito");
+      setTimeout(() => { //no es real, si falla entre medias tiene demasiado retardo, pero es la manera de que deje hacer cosas rápido
+        get();
+      }, 100000);
+    } catch (error) {
+      console.log("el error", error);
+    }
   };
 
-  const addTarea = (valor) => {
-    const nuevaListaTareas = [...listaTareas, valor];
-    setListaTareas(nuevaListaTareas);
-    //setListaTareas([...listaTareas, valor]); esto no se puede hacer por problemas de sincronía, hay que almacenar el valor nuevo al array existente metiéndolo en una const (dos líneas arriba)
-    putTareas(nuevaListaTareas);
+  const addTarea = async (valor) => {
+    try {
+      const nuevaListaTareas = [...listaTareas, valor];
+      setListaTareas(nuevaListaTareas);
+      //setListaTareas([...listaTareas, valor]); esto no se puede hacer por problemas de sincronía, hay que almacenar el valor nuevo al array existente metiéndolo en una const (dos líneas arriba)
+      await putTareas(nuevaListaTareas);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const deleteTarea = (tarea) => {
-    const nuevaListaTareas = listaTareas.filter((obj) => obj.id !== tarea.id);
-    setListaTareas(nuevaListaTareas);
-    putTareas(nuevaListaTareas);
+  const deleteTarea = async (tarea) => {
+    try {
+      const nuevaListaTareas = listaTareas.filter((obj) => obj.id !== tarea.id);
+      setListaTareas(nuevaListaTareas);
+      await putTareas(nuevaListaTareas);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const checkTarea = (tarea) => {
     const id = tarea.id;
     const modificaTarea = listaTareas.map((obj) => {
-      if (obj.id === id) {
-        return {...obj, done: true};
-      }
-      return obj;
+      return obj.id === id ? {...obj, done: true} : obj;
     });
     const nuevaListaTareas = [...modificaTarea];
     setListaTareas(nuevaListaTareas);
