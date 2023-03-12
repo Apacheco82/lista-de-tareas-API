@@ -13,6 +13,10 @@ const Home = () => {
     get();
   }, []);
 
+ /* useEffect(() => { //prueba para ver si se puede ejecutar un get cuando cambie la lista de tareas, no funciona
+    get();
+  }, [listaTareas]);*/
+
   const get = async () => {
     try {
       const response = await fetch(URL, {
