@@ -71,7 +71,8 @@ const Home = () => {
   const checkTarea = (tarea) => { //funcion para marcar la tarea como completada
     const id = tarea.id; //se almacena la key id del obj lista de tareas
     const modificaTarea = listaTareas.map((obj) => { //se recorre la lista de tareas habiendo creado una const en la que meter el resultado
-      return obj.id === id ? {...obj, done: true} : obj; //se cambia la key done de la tarea que coincida con el id o returna el objeto
+      return obj.id === id ? {...obj, done: !obj.done} : obj;
+      //se cambia la key done de la tarea que coincida con el id o returna el objeto
     });
     const nuevaListaTareas = [...modificaTarea]; //se crea una variable para almacenar una copia de la tarea modificada anteriormente 
     setListaTareas(nuevaListaTareas); //se setea a la lista de tareas
@@ -122,6 +123,7 @@ const Home = () => {
                   tarea={tarea}
                   index={index}
                   deleteTarea={() => deleteTarea(tarea)}
+                  checkTarea={() => checkTarea(tarea)}
                 />
               )
             )}
