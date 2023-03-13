@@ -15,13 +15,13 @@ const TareasHechas = ({tarea, checkTarea, deleteTarea}) => {
     <li className="list-group-item" id="tareasHechas">
       {tarea.label}
 
-      <i
+      <i title="Borrar"
         className="fa-solid fa-xmark"
         onClick={
           handleDelete /* el evento que llama a la funcion intermedia de arriba/ */
         }
       ></i>
-      <i class="fa-solid fa-rotate" onClick={handleCheck}></i>
+      <i title="No completada" className="fa-solid fa-rotate" onClick={handleCheck}></i>
     </li>
   );
 };
